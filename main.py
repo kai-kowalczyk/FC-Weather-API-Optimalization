@@ -17,6 +17,7 @@ class WeatherForecast:
         self.rain_chance = None
         self.info = None
         self.known_weather_data = self.get_data_from_file()
+        print(self.known_weather_data)
 
     def check_if_file_exists(self):
         print('check_if_file_exists')
@@ -52,11 +53,11 @@ class WeatherForecast:
             self.url_parameters = '&include=current&elements=precip,datetime,precipprob&unitGroup=metric'
             request_url = f'{self.BASE_URL}/{self.location}/{self.date}?key={self.api_key}{self.url_parameters}'
             r = requests.get(request_url)
-            print(r.json())   
+            self.info = r.json()
+            print(self.info)   
         else:
             quit()
-        self.info = r.json()
-        self.get_rain_chance
+        self.get_precip_info()
 
     def get_precip_info(self):
         print('get_precip_info')
@@ -71,7 +72,19 @@ class WeatherForecast:
             self.rain_chance = 'Będzie padać.'
         else:
             self.rain_chance = 'Nie wiem.'
-        print(self.rain_chance)
+        self.save_data_to_file()
+
+    def save_data_to_file(self):
+        self.known_weather_data[self.date] = self.rain_chance
+        with open(self.logs) as weather_data:
+            data = json.load(weather_data)
+        
+        new_data = {self.date: self.rain_chance}
+        data.update(new_data)
+
+        with open(self.logs, 'w') as weather_data:
+            json.dump(data, weather_data)
+
 
     def __iter__(self):
         print('__ITER__')
