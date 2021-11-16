@@ -88,7 +88,8 @@ class WeatherForecast:
 
     def __iter__(self):
         print('__ITER__')
-        return iter(self.known_weather_data)
+        for date in self.known_weather_data.keys():
+            yield date
 
     def __getitem__(self, key):
         print('__GETITEM__')
@@ -108,7 +109,8 @@ wf = WeatherForecast(api_key=sys.argv[1])
 if len(sys.argv) == 2:
     mode = input('Podaj komendę. "daty": by dowiedziec się dla jakich dat zapisane są juz dane pogodowe. "dane": by wypisać wszystkie zapisane pary data-pogoda.\n')
     if mode == 'daty':
-        pass
+        for date in wf:
+            print(date)
     elif mode == 'dane':
         for data in wf.items():
             print(data)
