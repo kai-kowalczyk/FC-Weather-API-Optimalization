@@ -86,8 +86,7 @@ class WeatherForecast:
             return self.known_weather_data[key]
 
     def items(self):
-        for date, precip_info in self.known_weather_data.items():
-            yield (date, precip_info)
+        return self.known_weather_data.items()
 
 
 
